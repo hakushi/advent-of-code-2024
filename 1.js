@@ -14,39 +14,44 @@ const numberMap = {
     'nine': 9,
 }
 
-const reformatRow = (row => 
-    Object.keys(numberMap).reduce((prev, curr) => {
-        const currentRow = prev.replaceAll(curr, String(numberMap[curr]));
-        return currentRow
-    }, row)
-)
-
-const reformatInput = input => input.map(row => reformatRow(row))
-
-
 const getFirstNumber = (str) => {
+
     for(i=0;i<=str.length;i++) {
         if(String(parseInt(str[i], 10)) !== 'NaN') {
             return str[i]
+        }
+
+        const match = Object.keys(numberMap).find(num => str.slice(i).startsWith(num))
+        
+        if (!!match) {
+            console.log('first', str, numberMap[match])    
+            return numberMap[match]
         }
     }
 }
 
 const getLastNumber = (str) => {
+
     for(i=str.length;i>=0;i--) {
         if(String(parseInt(str[i], 10)) !== 'NaN') {
             return str[i]
         }
+
+        const match = Object.keys(numberMap).find(num => str.slice(i).startsWith(num))
+        if (!!match) {
+            console.log('last', str, numberMap[match])
+            return numberMap[match]
+        }
     }
+
 }
 
 const getRowNumber = (row) => parseInt(`${getFirstNumber(row)}${getLastNumber(row)}`, 10)
 
 let sum = 0;
 
-reformatInput(parsedInput).forEach(row => {sum +=getRowNumber(row)})
-
-
-reformatInput(parsedInput).forEach((row, index) => console.log( parsedInput[index] + '\n' + reformatInput(parsedInput)[index] + '\n' + getRowNumber(row) + '\n---------------\n'))
+parsedInput.forEach(row => {
+    sum +=getRowNumber(row)
+})
 
 console.log(sum)
